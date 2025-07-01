@@ -1,5 +1,6 @@
 package com.uzinfocom.uzinfocomcontrol.service;
 
+import com.uzinfocom.uzinfocomcontrol.model.DTO.UserDTO;
 import com.uzinfocom.uzinfocomcontrol.model.Department;
 import com.uzinfocom.uzinfocomcontrol.model.User;
 import com.uzinfocom.uzinfocomcontrol.model.enums.Position;
@@ -91,4 +92,25 @@ public class UserService {
     public void deleteAll() {
         userRepository.deleteAll();
     }
+
+    public UserDTO toUserDto(User user) {
+        if (user == null) return null;
+        UserDTO dto = new UserDTO();
+        dto.setId(user.getId());
+        dto.setFirstName(user.getFirstName());
+        dto.setLastName(user.getLastName());
+        dto.setPatronymic(user.getPatronymic());
+        dto.setUserName(user.getUserName());
+        dto.setPhoneNumber(user.getPhoneNumber());
+        dto.setDateOfBirthday(user.getDateOfBirthday());
+        dto.setTelegramPosition(user.getTelegramPosition());
+
+        if (user.getDepartment() != null) {
+            dto.setDepartmentId(user.getDepartment().getId());
+            dto.setDepartmentName(user.getDepartment().getName());
+        }
+
+        return dto;
+    }
+
 }

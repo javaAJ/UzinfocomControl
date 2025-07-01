@@ -12,7 +12,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserDTO {
+public class ResponseUserDTO {
     private Long id;
     private String lastName;
     private String firstName;
@@ -22,5 +22,4 @@ public class UserDTO {
     private Date dateOfBirthday;
     private Position telegramPosition;
     private Long departmentId;
-    private String departmentName;
 }
