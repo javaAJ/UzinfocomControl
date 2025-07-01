@@ -1,13 +1,8 @@
 spring:
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/uzinfocom_control_db}
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:SERGELI6}
-    driver-class-name: org.postgresql.Driver
-
+    url: jdbc:postgresql://postgres.railway.internal:5432/railway
+    password: ChKIOmJHcrMPXEDshqVNmmEwtWsTBFvj
+    username: postgres
   jpa:
     hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+      ddl-auto: create-drop
