@@ -2,6 +2,7 @@ package com.uzinfocom.uzinfocomcontrol.service;
 
 import com.uzinfocom.uzinfocomcontrol.model.Company;
 import com.uzinfocom.uzinfocomcontrol.model.DTO.DepartmentDTO;
+import com.uzinfocom.uzinfocomcontrol.model.DTO.UserDTO;
 import com.uzinfocom.uzinfocomcontrol.model.Department;
 import com.uzinfocom.uzinfocomcontrol.model.User;
 import com.uzinfocom.uzinfocomcontrol.model.repository.DepartmentRepository;
@@ -13,11 +14,14 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DepartmentService {
     @Autowired
     private DepartmentRepository departmentRepository;
+    @Autowired
+    private UserService userService;
 
     public List<Department> getAll(){
         return departmentRepository.findAll();
@@ -68,4 +72,33 @@ public class DepartmentService {
     public void delete(Long departmentId) {
         departmentRepository.deleteById(departmentId);
     }
+
+    public DepartmentDTO toDepartmentDto(Department department) {
+        if (department == null) return null;
+
+        DepartmentDTO dto = new DepartmentDTO();
+        dto.setId(department.getId());
+        dto.setName(department.getName());
+
+        if (department.getAdmin() != null) {
+            dto.setAdminId(department.getAdmin().getId());
+            dto.setAdminFullName(
+                    department.getAdmin().getFirstName() + " " + department.getAdmin().getLastName()
+            );
+        }
+
+        if (department.getCompany() != null) {
+            dto.setCompanyId(department.getCompany().getId());
+            dto.setCompanyName(department.getCompany().getName());
+        }
+
+        if (department.getUsers() != null) {
+            List<UserDTO> usersDTO = department.getUsers().stream()
+                    .map(userService::toUserDto)
+                    .collect(Collectors.toList());
+            dto.setUsers(usersDTO);
+        }
+        return dto;
+    }
+
 }

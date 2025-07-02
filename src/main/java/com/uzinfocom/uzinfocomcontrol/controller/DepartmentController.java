@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin
@@ -24,17 +25,22 @@ public class DepartmentController {
     private CompanyService companyService;
 
     @GetMapping("/getAll")
-    public List<Department> getAll() {
-        return departmentService.getAll();
+    public List<DepartmentDTO> getAll() {
+        List<Department> departmentList = departmentService.getAll();
+        List<DepartmentDTO> departmentDTOList = new ArrayList<>();
+        for (Department department : departmentList) {
+            departmentDTOList.add(departmentService.toDepartmentDto(department));
+        }
+        return departmentDTOList;
     }
 
     @GetMapping("/get/{id}")
-    public Department getAll(@PathVariable(name = "id") Long departmentId) {
+    public DepartmentDTO getAll(@PathVariable(name = "id") Long departmentId) {
         Department department = departmentService.getById(departmentId);
         if (department == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Отдел не найден");
         }
-        return department;
+        return departmentService.toDepartmentDto(department);
     }
 
     @GetMapping("/add")

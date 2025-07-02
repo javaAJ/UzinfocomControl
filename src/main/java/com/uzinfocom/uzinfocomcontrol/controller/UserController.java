@@ -5,10 +5,7 @@ import com.uzinfocom.uzinfocomcontrol.model.User;
 import com.uzinfocom.uzinfocomcontrol.service.UserService;
 import com.uzinfocom.uzinfocomcontrol.telegramBot.MyBot;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.util.ArrayList;
@@ -21,7 +18,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-
     @GetMapping("/getAll")
     public List<UserDTO> getAll(){
         List<User> users = userService.getAll();
@@ -33,13 +29,9 @@ public class UserController {
     }
 
     @GetMapping("/get/{id}")
-    public List<UserDTO> get(){
-        List<User> users = userService.getAll();
-        List<UserDTO> userDTOList = new ArrayList<>();
-        for (User user : users) {
-            userDTOList.add(userService.toUserDto(user));
-        }
-        return userDTOList;
+    public UserDTO get(@PathVariable("id") Long userId ){
+        User user = userService.getById(userId);
+        return userService.toUserDto(user);
     }
 
     @GetMapping("/delete/all")
