@@ -6,7 +6,7 @@ import com.uzinfocom.uzinfocomcontrol.service.RegisterLinkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/registerLink")
 public class RegisterLinkController {
