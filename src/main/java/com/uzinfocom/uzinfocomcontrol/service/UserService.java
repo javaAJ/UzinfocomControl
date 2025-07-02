@@ -116,9 +116,12 @@ public class UserService {
         List<User> allUsers = userRepository.findAll();
         LocalDate today = LocalDate.now();
 
+        System.out.println(today.getDayOfMonth() + "   " + today.getMonthValue());
+        System.out.println("dadsadadsadsada");
         return allUsers.stream()
                 .filter(u -> {
                     LocalDate dob = u.getDateOfBirthday(); // тип должен быть LocalDate
+                    System.out.println(dob.getDayOfMonth() +"  " + dob.getMonthValue());
                     return dob.getDayOfMonth() == today.getDayOfMonth() &&
                             dob.getMonthValue() == today.getMonthValue();
                 })
