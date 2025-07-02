@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity(name = "users")
@@ -23,7 +24,7 @@ public class User {
     private String patronymic;
     private String userName;
     private String phoneNumber;
-    private Date dateOfBirthday;
+    private LocalDate dateOfBirthday;
     @Enumerated(EnumType.STRING)
     private Position telegramPosition;
     @ManyToOne(fetch = FetchType.LAZY)

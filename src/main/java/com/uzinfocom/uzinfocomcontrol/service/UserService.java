@@ -8,6 +8,9 @@ import com.uzinfocom.uzinfocomcontrol.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -59,29 +62,18 @@ public class UserService {
         userRepository.save(user);
     }
 
+
     public boolean setDateOfBirthday(User user, String dateOfBirthday) {
-        String[] dateSplit = dateOfBirthday.split("/");
-        int day;
-        int month;
-        int year;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
         try {
-            day = Integer.parseInt(dateSplit[0]);
-            month = Integer.parseInt(dateSplit[1]);
-            year = Integer.parseInt(dateSplit[2]);
-        } catch (Exception e) {
+            LocalDate parsedDate = LocalDate.parse(dateOfBirthday, formatter);
+            user.setDateOfBirthday(parsedDate);
+            userRepository.save(user);
+            return true;
+        } catch (DateTimeParseException e) {
             return false;
         }
-
-        Date date = new Date();
-        date.setDate(day);
-        date.setMonth(month);
-        date.setYear(year);
-        System.out.println(date.getYear());
-
-        user.setDateOfBirthday(date);
-
-        userRepository.save(user);
-        return true;
     }
 
     public void setPosition(User user, Position position) {
