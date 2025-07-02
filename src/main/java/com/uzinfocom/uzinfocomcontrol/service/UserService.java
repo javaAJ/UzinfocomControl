@@ -14,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -112,10 +113,15 @@ public class UserService {
 
 
     public List<User> checkBirthdaysAndSendWishes() {
+        List<User> allUsers = userRepository.findAll();
         LocalDate today = LocalDate.now();
-        int day = today.getDayOfMonth();
-        int month = today.getMonthValue();
 
-        return userRepository.findUsersWithBirthday(day, month);
+        return allUsers.stream()
+                .filter(u -> {
+                    LocalDate dob = u.getDateOfBirthday(); // тип должен быть LocalDate
+                    return dob.getDayOfMonth() == today.getDayOfMonth() &&
+                            dob.getMonthValue() == today.getMonthValue();
+                })
+                .collect(Collectors.toList());
     }
 }
