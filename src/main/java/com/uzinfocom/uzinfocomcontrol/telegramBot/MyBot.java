@@ -123,7 +123,7 @@ public class MyBot extends TelegramLongPollingBot {
                 } else if (command.equals("dateOfBirthday")) {
                     userService.setPosition(user, Position.WAIT);
                     exec(botUserService.sendFinishRegister(chatId));
-                    birthdayService.save(user, user.getDepartment());
+//                    birthdayService.save(user, user.getDepartment());
                 }
                 exec(new DeleteMessage(chatId + "", messageId));
             } else if (data.startsWith("not/")) {
