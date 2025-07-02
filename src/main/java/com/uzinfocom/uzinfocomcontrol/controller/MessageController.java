@@ -4,9 +4,11 @@ import com.uzinfocom.uzinfocomcontrol.model.DTO.MessageDTO;
 import com.uzinfocom.uzinfocomcontrol.model.Department;
 import com.uzinfocom.uzinfocomcontrol.model.User;
 import com.uzinfocom.uzinfocomcontrol.service.DepartmentService;
+import com.uzinfocom.uzinfocomcontrol.service.UserService;
 import com.uzinfocom.uzinfocomcontrol.telegramBot.MyBot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,15 +20,17 @@ import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/send")
 public class MessageController {
     @Autowired
     private MyBot myBot;
-
     @Autowired
     private DepartmentService departmentService;
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/message/department/{id}")
     public void sendMessageByDepartment(
@@ -89,6 +93,14 @@ public class MessageController {
             myBot.execute(new SendDocument("6409116156",inputFile));
         } catch (IOException | TelegramApiException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Scheduled(cron = "0 0 17 * * *") // Каждый день в 9:00
+    public void checkBirthdaysAndSendWishes() {
+        List<User> usersBirthday = userService.checkBirthdaysAndSendWishes();
+        for (User user : usersBirthday) {
+            myBot.sendWishes(user);
         }
     }
 }

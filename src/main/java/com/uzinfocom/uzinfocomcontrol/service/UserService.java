@@ -6,12 +6,13 @@ import com.uzinfocom.uzinfocomcontrol.model.User;
 import com.uzinfocom.uzinfocomcontrol.model.enums.Position;
 import com.uzinfocom.uzinfocomcontrol.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -107,5 +108,15 @@ public class UserService {
 
     public void deleteById(Long userId) {
         userRepository.deleteById(userId);
+    }
+
+
+    @Scheduled(cron = "0 0 9 * * *") // Каждый день в 9:00
+    public List<User> checkBirthdaysAndSendWishes() {
+        LocalDate today = LocalDate.now();
+        int day = today.getDayOfMonth();
+        int month = today.getMonthValue();
+
+        return userRepository.findUsersWithBirthday(day, month);
     }
 }
