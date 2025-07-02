@@ -20,5 +20,6 @@ public class UserBirthday {
 
     @OneToOne
     private User userBirthday;
+    @OneToMany
     private List<BirthdayPayment> usersBirthdayPayment;
 }

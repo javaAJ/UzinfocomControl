@@ -29,6 +29,4 @@ public class User {
     private Position telegramPosition;
     @ManyToOne(fetch = FetchType.LAZY)
     private Department department;
-    @OneToOne
-    private BirthdayPayment birthdayPayment;
 }
