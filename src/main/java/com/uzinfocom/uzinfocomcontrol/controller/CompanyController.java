@@ -32,7 +32,7 @@ public class CompanyController {
         return company;
     }
 
-    @GetMapping("/add")
+    @PostMapping("/add")
     public Boolean addCompany(
             @RequestBody CompanyDTO companyDTO
     ) throws ServiceException {
@@ -44,7 +44,7 @@ public class CompanyController {
         return true;
     }
 
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteDepartment(@PathVariable(name = "id") Long companyId) {
         companyService.delete(companyId);
     }

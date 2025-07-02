@@ -113,4 +113,7 @@ public class UserService {
         return dto;
     }
 
+    public void deleteById(Long userId) {
+        userRepository.deleteById(userId);
+    }
 }

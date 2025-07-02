@@ -43,7 +43,7 @@ public class DepartmentController {
         return departmentService.toDepartmentDto(department);
     }
 
-    @GetMapping("/add")
+    @PostMapping("/add")
     public Boolean addDepartment(
             @RequestBody DepartmentDTO departmentDTO
     ) throws ServiceException {
@@ -56,7 +56,7 @@ public class DepartmentController {
         return true;
     }
 
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteDepartment(@PathVariable(name = "id") Long departmentId) {
         departmentService.delete(departmentId);
     }

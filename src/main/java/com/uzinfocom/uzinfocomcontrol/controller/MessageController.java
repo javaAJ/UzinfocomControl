@@ -29,7 +29,7 @@ public class MessageController {
     @Autowired
     private DepartmentService departmentService;
 
-    @GetMapping("/message/department/{id}")
+    @PostMapping("/message/department/{id}")
     public void sendMessageByDepartment(
             @PathVariable(name = "id") Long departmentId,
             @RequestBody() MessageDTO messageDTO
@@ -46,7 +46,7 @@ public class MessageController {
 
 
     }
-    @GetMapping("/message")
+    @PostMapping("/message")
     public void sendMessage(
             @RequestBody() MessageDTO messageDTO
     ){
@@ -56,7 +56,7 @@ public class MessageController {
         myBot.exec(new SendMessage(messageDTO.getId(),messageDTO.getMessage()));
     }
 
-    @GetMapping("/photo")
+    @PostMapping("/photo")
     public void sendPhoto(
             @RequestParam("file") MultipartFile file
     ){
@@ -68,7 +68,7 @@ public class MessageController {
         }
     }
 
-    @GetMapping("/video")
+    @PostMapping("/video")
     public void sendVideo(
             @RequestParam("file") MultipartFile file
     ){
@@ -80,7 +80,7 @@ public class MessageController {
         }
     }
 
-    @GetMapping("/document")
+    @PostMapping("/document")
     public void sendDocument(
             @RequestParam("file") MultipartFile file,
             @RequestParam("command") String command
