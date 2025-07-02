@@ -19,7 +19,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
 
-@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/send")
 public class MessageController {
