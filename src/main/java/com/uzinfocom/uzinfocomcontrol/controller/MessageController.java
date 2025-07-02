@@ -96,11 +96,13 @@ public class MessageController {
         }
     }
 
-    @Scheduled(cron = "0 12 1 * * *",zone = "Asia/Tashkent") // Каждый день в 9:00
+    @Scheduled(cron = "0 17 1 * * *",zone = "Asia/Tashkent") // Каждый день в 9:00
     public void checkBirthdaysAndSendWishes() {
         System.out.println("=========================================================");
         List<User> usersBirthday = userService.checkBirthdaysAndSendWishes();
+        System.out.println(usersBirthday.size());
         for (User user : usersBirthday) {
+            System.out.println("for: " +  user.getUserName());
             myBot.sendWishes(user);
         }
     }
