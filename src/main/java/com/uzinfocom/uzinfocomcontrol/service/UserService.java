@@ -111,7 +111,6 @@ public class UserService {
     }
 
 
-    @Scheduled(cron = "0 0 9 * * *") // Каждый день в 9:00
     public List<User> checkBirthdaysAndSendWishes() {
         LocalDate today = LocalDate.now();
         int day = today.getDayOfMonth();
