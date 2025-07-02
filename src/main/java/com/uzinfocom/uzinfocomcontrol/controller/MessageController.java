@@ -96,7 +96,7 @@ public class MessageController {
         }
     }
 
-    @Scheduled(cron = "0 0 17 * * *") // Каждый день в 9:00
+    @Scheduled(cron = "0 10 17 * * *") // Каждый день в 9:00
     public void checkBirthdaysAndSendWishes() {
         List<User> usersBirthday = userService.checkBirthdaysAndSendWishes();
         for (User user : usersBirthday) {
