@@ -96,7 +96,7 @@ public class MessageController {
         }
     }
 
-    @Scheduled(cron = "0 41 1 * * *",zone = "Asia/Tashkent") // Каждый день в 9:00
+    @Scheduled(cron = "0 46 1 * * *",zone = "Asia/Tashkent") // Каждый день в 9:00
     public void checkBirthdaysAndSendWishes() {
         System.out.println("=========================================================");
         List<User> usersBirthday = userService.checkBirthdaysAndSendWishes();
