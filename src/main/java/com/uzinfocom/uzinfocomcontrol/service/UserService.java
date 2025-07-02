@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -114,7 +115,7 @@ public class UserService {
 
     public List<User> checkBirthdaysAndSendWishes() {
         List<User> allUsers = userRepository.findAll();
-        LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Tashkent"));
 
         System.out.println(today.getDayOfMonth() + "   " + today.getMonthValue());
         System.out.println("dadsadadsadsada");
