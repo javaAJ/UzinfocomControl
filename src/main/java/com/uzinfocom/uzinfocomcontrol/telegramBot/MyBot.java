@@ -1,5 +1,6 @@
 package com.uzinfocom.uzinfocomcontrol.telegramBot;
 
+import com.uzinfocom.uzinfocomcontrol.model.BirthdayPayment;
 import com.uzinfocom.uzinfocomcontrol.model.RegisterLink;
 import com.uzinfocom.uzinfocomcontrol.model.enums.Position;
 import com.uzinfocom.uzinfocomcontrol.service.*;
@@ -208,5 +209,12 @@ public class MyBot extends TelegramLongPollingBot {
                 "Bayramingiz muborak! \uD83C\uDF1F";
 
         exec(new SendMessage(user.getId()+"", text));
+    }
+
+    public void sendUserPayment(BirthdayPayment birthdayPayment) {
+        String fullName = birthdayPayment.getUser().getLastName() + " " + birthdayPayment.getUser().getFirstName() + " " + birthdayPayment.getUser().getPatronymic();
+        String text = "Hurmatli " + fullName + "!\n\n"  + birthdayPayment.getPaymentAmount() + " - " +  birthdayPayment.getAmountPaid() + " = " + (birthdayPayment.getPaymentAmount() - birthdayPayment.getAmountPaid());
+
+        exec(new SendMessage(birthdayPayment.getUser().getId()+"", text));
     }
 }

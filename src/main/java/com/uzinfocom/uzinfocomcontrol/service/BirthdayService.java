@@ -77,8 +77,20 @@ public class BirthdayService {
         userBirthdayDTO.setUsersBirthdayPayment(userBirthdayPaymentDTOList);
         return userBirthdayDTO;
     }
+
     public void mapping(UserBirthdayDTO userBirthdayDTO) {
 
     }
 
+    public void saveUsersOfDepartment(List<User> users) {
+        for (User user : users) {
+            if (checkBirthday(user)){
+                save(user, user.getDepartment());
+            }
+        }
+    }
+
+    private boolean checkBirthday(User user) {
+        return userBirthdayRepository.findByUserBirthdayId(user.getId()) != null;
+    }
 }

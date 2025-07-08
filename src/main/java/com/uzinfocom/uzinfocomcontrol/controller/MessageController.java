@@ -1,8 +1,11 @@
 package com.uzinfocom.uzinfocomcontrol.controller;
 
+import com.uzinfocom.uzinfocomcontrol.model.BirthdayPayment;
 import com.uzinfocom.uzinfocomcontrol.model.DTO.MessageDTO;
 import com.uzinfocom.uzinfocomcontrol.model.Department;
 import com.uzinfocom.uzinfocomcontrol.model.User;
+import com.uzinfocom.uzinfocomcontrol.model.UserBirthday;
+import com.uzinfocom.uzinfocomcontrol.service.BirthdayService;
 import com.uzinfocom.uzinfocomcontrol.service.DepartmentService;
 import com.uzinfocom.uzinfocomcontrol.service.UserService;
 import com.uzinfocom.uzinfocomcontrol.telegramBot.MyBot;
@@ -29,6 +32,8 @@ public class MessageController {
     private MyBot myBot;
     @Autowired
     private DepartmentService departmentService;
+    @Autowired
+    private BirthdayService birthdayService;
     @Autowired
     private UserService userService;
 
@@ -96,15 +101,28 @@ public class MessageController {
         }
     }
 
-    @Scheduled(cron = "0 46 1 * * *",zone = "Asia/Tashkent") // Каждый день в 9:00
+    @Scheduled(cron = "0 27 11 * * *",zone = "Asia/Tashkent") // Каждый день в 9:00
     public void checkBirthdaysAndSendWishes() {
-        System.out.println("=========================================================");
         List<User> usersBirthday = userService.checkBirthdaysAndSendWishes();
-        System.out.println(usersBirthday.size());
         for (User user : usersBirthday) {
-            System.out.println("for: " +  user.getUserName());
             myBot.sendWishes(user);
         }
+    }
+    @Scheduled(cron = "0 29 11 * * *",zone = "Asia/Tashkent") // Каждый день в 9:00
+    public void checkBirthdayPayment() {
+        List<UserBirthday> userBirthdayList = birthdayService.findAll();
+        for (UserBirthday userBirthday : userBirthdayList) {
+            for (BirthdayPayment birthdayPayment : userBirthday.getUsersBirthdayPayment()) {
+                if (birthdayPayment.getPaymentAmount()>birthdayPayment.getAmountPaid()) {
+                    myBot.sendUserPayment(birthdayPayment);
+                }
+            }
+        }
+    }
+    @Scheduled(cron = "0 28 11 * * *",zone = "Asia/Tashkent") // Каждый день в 9:00
+    public void checkSoonBirthday() {
+        List<User> soonBirthday = userService.findSoonBirthday();
+        birthdayService.saveUsersOfDepartment(soonBirthday);
     }
 
 }

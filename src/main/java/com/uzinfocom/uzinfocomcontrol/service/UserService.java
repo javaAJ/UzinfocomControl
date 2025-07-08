@@ -128,4 +128,19 @@ public class UserService {
                 })
                 .collect(Collectors.toList());
     }
+
+    public List<User> findSoonBirthday() {
+        List<User> users = userRepository.findAll();
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Tashkent"));
+        LocalDate afterMonth = LocalDate.now(ZoneId.of("Asia/Tashkent"));
+        afterMonth = afterMonth.plusMonths(1);
+
+        List<User> usersWithBirthday = new ArrayList<>();
+        for (User user : users) {
+            if(user.getDateOfBirthday().isAfter(today) &&  user.getDateOfBirthday().isBefore(afterMonth)) {
+                usersWithBirthday.add(user);
+            }
+        }
+        return usersWithBirthday;
+    }
 }
