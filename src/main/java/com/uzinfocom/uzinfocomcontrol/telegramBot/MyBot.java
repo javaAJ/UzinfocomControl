@@ -238,9 +238,10 @@ public class MyBot extends TelegramLongPollingBot {
     }
 
     public void sendUserPayment(BirthdayPayment birthdayPayment) {
-        String fullName = birthdayPayment.getUser().getLastName() + " " + birthdayPayment.getUser().getFirstName() + " " + birthdayPayment.getUser().getPatronymic();
+        com.uzinfocom.uzinfocomcontrol.model.User user = userService.getById(birthdayPayment.getUser().getId());
+        String fullName = user.getLastName() + " " + user.getFirstName() + " " + user.getPatronymic();
         String text = "Hurmatli " + fullName + "!\n\n"  + birthdayPayment.getPaymentAmount() + " - " +  birthdayPayment.getAmountPaid() + " = " + (birthdayPayment.getPaymentAmount() - birthdayPayment.getAmountPaid());
 
-        exec(new SendMessage(birthdayPayment.getUser().getId()+"", text));
+        exec(new SendMessage(user.getId()+"", text));
     }
 }
