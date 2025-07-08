@@ -29,6 +29,9 @@ public class DepartmentService {
     public Department getById(Long id){
         return departmentRepository.findById(id).orElse(null);
     }
+    public Department getUsersByDepartmentId(Long id){
+        return departmentRepository.findByIdWithUsers(id).orElse(null);
+    }
 
     public boolean setAdmin(Long departmentId, User user) {
         Department department = getById(departmentId);
