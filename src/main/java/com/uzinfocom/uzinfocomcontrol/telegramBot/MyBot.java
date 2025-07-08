@@ -97,7 +97,11 @@ public class MyBot extends TelegramLongPollingBot {
                         }
 
                         List<com.uzinfocom.uzinfocomcontrol.model.User> soonBirthday = userService.findSoonBirthday();
-                        birthdayService.saveUsersOfDepartment(soonBirthday);
+                        for (com.uzinfocom.uzinfocomcontrol.model.User soonBirthdayUser : soonBirthday) {
+                            if (birthdayService.checkBirthday(user)){
+                                birthdayService.save(soonBirthdayUser, departmentService.getById(soonBirthdayUser.getDepartment().getId()));
+                            }
+                        }
                     }if(text.equals("add")){
                         Department department = departmentService.getById(1L);
                         userService.saveMockDate(department);

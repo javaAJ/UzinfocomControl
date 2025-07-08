@@ -82,18 +82,8 @@ public class BirthdayService {
     public void mapping(UserBirthdayDTO userBirthdayDTO) {
 
     }
-    @Transactional
-    public void saveUsersOfDepartment(List<User> users) {
-        for (User user : users) {
-            if (checkBirthday(user)){
-                System.out.println(user.getDepartment().getId());
-                System.out.println(user.getDepartment().getName());
-                save(user, user.getDepartment());
-            }
-        }
-    }
 
-    private boolean checkBirthday(User user) {
+    public boolean checkBirthday(User user) {
         return userBirthdayRepository.findByUserBirthdayId(user.getId()) == null;
     }
 }
