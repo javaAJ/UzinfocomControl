@@ -93,6 +93,8 @@ public class BirthdayService {
     }
 
     private boolean checkBirthday(User user) {
-        return userBirthdayRepository.findByUserBirthdayId(user.getId()) != null;
+        UserBirthday byUserBirthdayId = userBirthdayRepository.findByUserBirthdayId(user.getId());
+        System.out.println(byUserBirthdayId);
+        return byUserBirthdayId != null;
     }
 }
