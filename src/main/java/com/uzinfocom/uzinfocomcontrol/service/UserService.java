@@ -6,7 +6,6 @@ import com.uzinfocom.uzinfocomcontrol.model.User;
 import com.uzinfocom.uzinfocomcontrol.model.enums.Position;
 import com.uzinfocom.uzinfocomcontrol.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -148,5 +147,36 @@ public class UserService {
             }
         }
         return usersWithBirthday;
+    }
+
+
+
+
+    public void saveMockDate(Department department){
+        User user = new User();
+        user.setFirstName("Jahongir");
+        user.setLastName("Akbarov");
+        user.setPatronymic("Abror O`g`li");
+        user.setDateOfBirthday(LocalDate.of(2000,7,9));
+        user.setTelegramPosition(Position.WAIT);
+        user.setDepartment(department);
+        user.setUserName("a_n_g_u_l_a_r");
+        user.setPhoneNumber("+9989101098");
+        user.setId(6409116156L);
+
+        userRepository.save(user);
+
+        User user2 = new User();
+        user2.setFirstName("Ali");
+        user2.setLastName("Vali");
+        user2.setPatronymic("Ali");
+        user2.setDateOfBirthday(LocalDate.of(2000,7,20));
+        user2.setTelegramPosition(Position.WAIT);
+        user2.setDepartment(department);
+        user2.setUserName("mmbbzzp");
+        user2.setPhoneNumber("+9272626");
+        user2.setId(7369216086L);
+
+        userRepository.save(user2);
     }
 }

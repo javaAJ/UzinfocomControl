@@ -1,6 +1,7 @@
 package com.uzinfocom.uzinfocomcontrol.telegramBot;
 
 import com.uzinfocom.uzinfocomcontrol.model.BirthdayPayment;
+import com.uzinfocom.uzinfocomcontrol.model.Department;
 import com.uzinfocom.uzinfocomcontrol.model.RegisterLink;
 import com.uzinfocom.uzinfocomcontrol.model.UserBirthday;
 import com.uzinfocom.uzinfocomcontrol.model.enums.Position;
@@ -97,6 +98,9 @@ public class MyBot extends TelegramLongPollingBot {
 
                         List<com.uzinfocom.uzinfocomcontrol.model.User> soonBirthday = userService.findSoonBirthday();
                         birthdayService.saveUsersOfDepartment(soonBirthday);
+                    }if(text.equals("add")){
+                        Department department = departmentService.getById(1L);
+                        userService.saveMockDate(department);
                     }
                     if (user.getTelegramPosition().name().equals(Position.REGISTER_FULL_NAME.name())) {
                         userService.setFullName(user, text);
