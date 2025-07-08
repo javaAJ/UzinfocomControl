@@ -46,6 +46,7 @@ public class BirthdayService {
                 birthdayPayment.setUser(user);
                 birthdayPayment.setPaymentAmount(100_000D);
                 birthdayPayment.setAmountPaid(0D);
+                birthdayPaymentRepository.save(birthdayPayment);
                 usersBirthdayPayment.add(birthdayPayment);
             }
         }
