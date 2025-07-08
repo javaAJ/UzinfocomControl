@@ -86,6 +86,8 @@ public class BirthdayService {
     public void saveUsersOfDepartment(List<User> users) {
         for (User user : users) {
             if (checkBirthday(user)){
+                System.out.println(user.getDepartment().getId());
+                System.out.println(user.getDepartment().getName());
                 save(user, user.getDepartment());
             }
         }
