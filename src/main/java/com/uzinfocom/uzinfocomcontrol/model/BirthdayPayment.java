@@ -18,7 +18,7 @@ public class BirthdayPayment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne()
+    @ManyToOne(fetch =  FetchType.EAGER)
     private User user;
     private Double paymentAmount;
     private Double amountPaid;
