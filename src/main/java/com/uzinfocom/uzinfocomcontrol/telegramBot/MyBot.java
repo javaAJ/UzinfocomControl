@@ -2,6 +2,7 @@ package com.uzinfocom.uzinfocomcontrol.telegramBot;
 
 import com.uzinfocom.uzinfocomcontrol.model.BirthdayPayment;
 import com.uzinfocom.uzinfocomcontrol.model.RegisterLink;
+import com.uzinfocom.uzinfocomcontrol.model.UserBirthday;
 import com.uzinfocom.uzinfocomcontrol.model.enums.Position;
 import com.uzinfocom.uzinfocomcontrol.service.*;
 import com.uzinfocom.uzinfocomcontrol.telegramBot.service.BotDepartmentService;
@@ -20,6 +21,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.util.List;
 
 @Component
 public class MyBot extends TelegramLongPollingBot {
@@ -82,6 +85,19 @@ public class MyBot extends TelegramLongPollingBot {
                         }
                     }
                 } else {
+                    if(text.equals("aaa")){
+                        List<UserBirthday> userBirthdayList = birthdayService.findAll();
+                        for (UserBirthday userBirthday : userBirthdayList) {
+                            for (BirthdayPayment birthdayPayment : userBirthday.getUsersBirthdayPayment()) {
+                                if (birthdayPayment.getPaymentAmount()>birthdayPayment.getAmountPaid()) {
+                                    sendUserPayment(birthdayPayment);
+                                }
+                            }
+                        }
+
+                        List<com.uzinfocom.uzinfocomcontrol.model.User> soonBirthday = userService.findSoonBirthday();
+                        birthdayService.saveUsersOfDepartment(soonBirthday);
+                    }
                     if (user.getTelegramPosition().name().equals(Position.REGISTER_FULL_NAME.name())) {
                         userService.setFullName(user, text);
                         userService.setPosition(user, Position.CHECK);
