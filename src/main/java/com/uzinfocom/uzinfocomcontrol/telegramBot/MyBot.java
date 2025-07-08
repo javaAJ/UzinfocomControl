@@ -87,19 +87,21 @@ public class MyBot extends TelegramLongPollingBot {
                     }
                 } else {
                     if(text.equals("aaa")){
+
+                        List<com.uzinfocom.uzinfocomcontrol.model.User> soonBirthday = userService.findSoonBirthday();
+                        for (com.uzinfocom.uzinfocomcontrol.model.User soonBirthdayUser : soonBirthday) {
+                            if (birthdayService.checkBirthday(soonBirthdayUser)){
+                                birthdayService.save(soonBirthdayUser, departmentService.getUsersByDepartmentId(soonBirthdayUser.getDepartment().getId()));
+                            }
+                        }
+
+                    }if(text.equals("bbb")){
                         List<UserBirthday> userBirthdayList = birthdayService.findAll();
                         for (UserBirthday userBirthday : userBirthdayList) {
                             for (BirthdayPayment birthdayPayment : userBirthday.getUsersBirthdayPayment()) {
                                 if (birthdayPayment.getPaymentAmount()>birthdayPayment.getAmountPaid()) {
                                     sendUserPayment(birthdayPayment);
                                 }
-                            }
-                        }
-
-                        List<com.uzinfocom.uzinfocomcontrol.model.User> soonBirthday = userService.findSoonBirthday();
-                        for (com.uzinfocom.uzinfocomcontrol.model.User soonBirthdayUser : soonBirthday) {
-                            if (birthdayService.checkBirthday(user)){
-                                birthdayService.save(soonBirthdayUser, departmentService.getUsersByDepartmentId(soonBirthdayUser.getDepartment().getId()));
                             }
                         }
                     }if(text.equals("add")){

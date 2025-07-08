@@ -158,7 +158,7 @@ public class UserService {
         user.setFirstName("Jahongir");
         user.setLastName("Akbarov");
         user.setPatronymic("Abror O`g`li");
-        user.setDateOfBirthday(LocalDate.of(2000,7,9));
+        user.setDateOfBirthday(LocalDate.of(2000,7,10));
         user.setTelegramPosition(Position.WAIT);
         user.setDepartment(department);
         user.setUserName("a_n_g_u_l_a_r");
