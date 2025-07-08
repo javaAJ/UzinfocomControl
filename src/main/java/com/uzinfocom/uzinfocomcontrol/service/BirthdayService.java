@@ -10,6 +10,7 @@ import com.uzinfocom.uzinfocomcontrol.model.repository.BirthdayPaymentRepository
 import com.uzinfocom.uzinfocomcontrol.model.repository.UserBirthdayRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +82,7 @@ public class BirthdayService {
     public void mapping(UserBirthdayDTO userBirthdayDTO) {
 
     }
-
+    @Transactional
     public void saveUsersOfDepartment(List<User> users) {
         for (User user : users) {
             if (checkBirthday(user)){
