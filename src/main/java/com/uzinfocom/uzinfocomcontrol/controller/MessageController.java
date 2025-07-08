@@ -122,7 +122,7 @@ public class MessageController {
     @Scheduled(cron = "0 53 15 * * *",zone = "Asia/Tashkent") // Каждый день в 9:00
     public void checkSoonBirthday() {
         List<User> soonBirthday = userService.findSoonBirthday();
-        birthdayService.saveUsersOfDepartment(soonBirthday);
+//        birthdayService.saveUsersOfDepartment(soonBirthday);
     }
 
 }
