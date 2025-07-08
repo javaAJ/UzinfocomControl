@@ -84,8 +84,6 @@ public class BirthdayService {
 
     public void saveUsersOfDepartment(List<User> users) {
         for (User user : users) {
-            System.out.println(user.getFirstName() + " " + user.getLastName());
-            System.out.println(checkBirthday(user));
             if (checkBirthday(user)){
                 save(user, user.getDepartment());
             }
@@ -93,8 +91,6 @@ public class BirthdayService {
     }
 
     private boolean checkBirthday(User user) {
-        UserBirthday byUserBirthdayId = userBirthdayRepository.findByUserBirthdayId(user.getId());
-        System.out.println(byUserBirthdayId.getId());
-        return byUserBirthdayId.getId() != null;
+        return userBirthdayRepository.findByUserBirthdayId(user.getId()) == null;
     }
 }
