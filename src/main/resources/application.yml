@@ -6,3 +6,13 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+
+
+#spring:
+#  datasource:
+#    url: jdbc:postgresql://postgres.railway.internal:5432/railway
+#    password: SERGELI6
+#    username: postgres
+#  jpa:
+#    hibernate:
+#      ddl-auto: create-drop

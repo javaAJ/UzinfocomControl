@@ -136,7 +136,9 @@ public class UserService {
         afterMonth = afterMonth.plusMonths(1);
 
         List<User> usersWithBirthday = new ArrayList<>();
+        System.out.println("=================================");
         for (User user : users) {
+            System.out.println(user.getDateOfBirthday().isAfter(today) &&  user.getDateOfBirthday().isBefore(afterMonth));
             if(user.getDateOfBirthday().isAfter(today) &&  user.getDateOfBirthday().isBefore(afterMonth)) {
                 usersWithBirthday.add(user);
             }
