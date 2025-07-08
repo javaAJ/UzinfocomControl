@@ -94,7 +94,7 @@ public class BirthdayService {
 
     private boolean checkBirthday(User user) {
         UserBirthday byUserBirthdayId = userBirthdayRepository.findByUserBirthdayId(user.getId());
-        System.out.println(byUserBirthdayId);
-        return byUserBirthdayId != null;
+        System.out.println(byUserBirthdayId.getId());
+        return byUserBirthdayId.getId() != null;
     }
 }
