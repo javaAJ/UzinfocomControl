@@ -101,14 +101,14 @@ public class MessageController {
         }
     }
 
-    @Scheduled(cron = "0 22 12 * * *",zone = "Asia/Tashkent") // Каждый день в 9:00
+    @Scheduled(cron = "0 52 15 * * *",zone = "Asia/Tashkent") // Каждый день в 9:00
     public void checkBirthdaysAndSendWishes() {
         List<User> usersBirthday = userService.checkBirthdaysAndSendWishes();
         for (User user : usersBirthday) {
             myBot.sendWishes(user);
         }
     }
-    @Scheduled(cron = "0 24 12 * * *",zone = "Asia/Tashkent") // Каждый день в 9:00
+    @Scheduled(cron = "0 54 15 * * *",zone = "Asia/Tashkent") // Каждый день в 9:00
     public void checkBirthdayPayment() {
         List<UserBirthday> userBirthdayList = birthdayService.findAll();
         for (UserBirthday userBirthday : userBirthdayList) {
@@ -119,7 +119,7 @@ public class MessageController {
             }
         }
     }
-    @Scheduled(cron = "0 23 12 * * *",zone = "Asia/Tashkent") // Каждый день в 9:00
+    @Scheduled(cron = "0 53 15 * * *",zone = "Asia/Tashkent") // Каждый день в 9:00
     public void checkSoonBirthday() {
         List<User> soonBirthday = userService.findSoonBirthday();
         birthdayService.saveUsersOfDepartment(soonBirthday);
