@@ -114,7 +114,7 @@ public class MessageController {
         for (UserBirthday userBirthday : userBirthdayList) {
             for (BirthdayPayment birthdayPayment : userBirthday.getUsersBirthdayPayment()) {
                 if (birthdayPayment.getPaymentAmount()>birthdayPayment.getAmountPaid()) {
-                    myBot.sendUserPayment(userBirthday.getUserBirthday(), birthdayPayment);
+                    myBot.sendUserPayment(userBirthday.getUserBirthday().getId(), birthdayPayment);
                 }
             }
         }
