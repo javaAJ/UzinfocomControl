@@ -100,7 +100,7 @@ public class MyBot extends TelegramLongPollingBot {
                         for (UserBirthday userBirthday : userBirthdayList) {
                             for (BirthdayPayment birthdayPayment : userBirthday.getUsersBirthdayPayment()) {
                                 if (birthdayPayment.getPaymentAmount()>birthdayPayment.getAmountPaid()) {
-                                    sendUserPayment(userBirthday.getUserBirthday(),birthdayPayment);
+                                    sendUserPayment(userBirthday.getUserBirthday().getId(),birthdayPayment);
                                 }
                             }
                         }
@@ -237,8 +237,9 @@ public class MyBot extends TelegramLongPollingBot {
         exec(new SendMessage(user.getId()+"", text));
     }
 
-    public void sendUserPayment(com.uzinfocom.uzinfocomcontrol.model.User userBirthday, BirthdayPayment birthdayPayment) {
+    public void sendUserPayment(Long userBirthdayId, BirthdayPayment birthdayPayment) {
         com.uzinfocom.uzinfocomcontrol.model.User user = userService.getById(birthdayPayment.getUser().getId());
+        com.uzinfocom.uzinfocomcontrol.model.User userBirthday = userService.getById(userBirthdayId);
         String userBirthdayFullName = userBirthday.getLastName() + " " + userBirthday.getFirstName() + " " + userBirthday.getPatronymic();
         String fullName = user.getLastName() + " " + user.getFirstName() + " " + user.getPatronymic();
         String text = "Tu`gulgan kun uchun berish kerak bo`lgan summa\n\n" +
