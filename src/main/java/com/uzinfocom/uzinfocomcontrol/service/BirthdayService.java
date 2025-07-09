@@ -41,7 +41,7 @@ public class BirthdayService {
 
         List<BirthdayPayment> usersBirthdayPayment = new ArrayList<>();
         for (User departmentUser : department.getUsers()) {
-            if (!departmentUser.getId().equals(user.getId())) {
+            if (departmentUser.getId().equals(user.getId())) {
                 BirthdayPayment birthdayPayment = new BirthdayPayment();
                 birthdayPayment.setUser(user);
                 birthdayPayment.setPaymentAmount(100_000D);
