@@ -12,12 +12,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserBirthdayPaymentDTO {
-    private Long id;
-
-    private Long userId;
-    private String lastName;
-    private String firstName;
-    private String patronymic;
+    private UserDTO user;
     private Double paymentAmount;
     private Double amountPaid;
+    private Boolean isPaid;
 }

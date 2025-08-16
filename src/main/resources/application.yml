@@ -1,18 +1,19 @@
-spring:
-  datasource:
-    url: jdbc:postgresql://postgres.railway.internal:5432/railway
-    password: ChKIOmJHcrMPXEDshqVNmmEwtWsTBFvj
-    username: postgres
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-
-
 #spring:
 #  datasource:
 #    url: jdbc:postgresql://postgres.railway.internal:5432/railway
-#    password: SERGELI6
+#    password: ChKIOmJHcrMPXEDshqVNmmEwtWsTBFvj
 #    username: postgres
 #  jpa:
 #    hibernate:
 #      ddl-auto: create-drop
+
+
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/uzinfocom_control_db
+    username: postgres
+    password: SERGELI6
+  jpa:
+    hibernate:
+      ddl-auto: create-drop

@@ -14,9 +14,7 @@ import java.util.List;
 @Setter
 public class UserBirthdayDTO {
     private Long id;
-    private Long userBirthdayId;
-    private String lastName;
-    private String firstName;
-    private String patronymic;
+    private UserDTO birthdayUser;
+    private Double totalAmountPaid;
     private List<UserBirthdayPaymentDTO> usersBirthdayPayment;
 }

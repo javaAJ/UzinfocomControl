@@ -1,21 +1,21 @@
 package com.uzinfocom.uzinfocomcontrol.service;
 
 import com.uzinfocom.uzinfocomcontrol.model.BirthdayPayment;
-import com.uzinfocom.uzinfocomcontrol.model.DTO.UserBirthdayDTO;
-import com.uzinfocom.uzinfocomcontrol.model.DTO.UserBirthdayPaymentDTO;
+import com.uzinfocom.uzinfocomcontrol.model.DTO.PayToBirthdayDTO;
 import com.uzinfocom.uzinfocomcontrol.model.Department;
 import com.uzinfocom.uzinfocomcontrol.model.User;
 import com.uzinfocom.uzinfocomcontrol.model.UserBirthday;
 import com.uzinfocom.uzinfocomcontrol.model.repository.BirthdayPaymentRepository;
 import com.uzinfocom.uzinfocomcontrol.model.repository.UserBirthdayRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
+@Slf4j
 @Service
 public class BirthdayService {
     @Autowired
@@ -32,6 +32,7 @@ public class BirthdayService {
     }
 
     public UserBirthday findByUserId(Long id) {
+
         return userBirthdayRepository.findByUserBirthdayId(id);
     }
 
@@ -41,9 +42,9 @@ public class BirthdayService {
 
         List<BirthdayPayment> usersBirthdayPayment = new ArrayList<>();
         for (User departmentUser : department.getUsers()) {
-            if (departmentUser.getId().equals(user.getId())) {
+            if (!departmentUser.getId().equals(user.getId())) {
                 BirthdayPayment birthdayPayment = new BirthdayPayment();
-                birthdayPayment.setUser(user);
+                birthdayPayment.setUser(departmentUser);
                 birthdayPayment.setPaymentAmount(100_000D);
                 birthdayPayment.setAmountPaid(0D);
                 birthdayPaymentRepository.save(birthdayPayment);
@@ -52,39 +53,34 @@ public class BirthdayService {
         }
 
         userBirthday.setUsersBirthdayPayment(usersBirthdayPayment);
-        return userBirthdayRepository.save(userBirthday);
+        UserBirthday save = userBirthdayRepository.save(userBirthday);
+        System.out.println(save.getUserBirthday().getFirstName());
+        return save;
     }
 
-    public UserBirthdayDTO mapping(UserBirthday userBirthday) {
-        UserBirthdayDTO userBirthdayDTO = new UserBirthdayDTO();
-        userBirthdayDTO.setId(userBirthday.getId());
-        userBirthdayDTO.setFirstName(userBirthday.getUserBirthday().getFirstName());
-        userBirthdayDTO.setLastName(userBirthday.getUserBirthday().getLastName());
-        userBirthdayDTO.setPatronymic(userBirthday.getUserBirthday().getPatronymic());
-
-        List<UserBirthdayPaymentDTO> userBirthdayPaymentDTOList = new ArrayList<>();
-
-        for (BirthdayPayment birthdayPayment : userBirthday.getUsersBirthdayPayment()) {
-            UserBirthdayPaymentDTO userBirthdayPaymentDTO = new UserBirthdayPaymentDTO();
-            userBirthdayPaymentDTO.setId(birthdayPayment.getId());
-            userBirthdayPaymentDTO.setUserId(birthdayPayment.getUser().getId());
-            userBirthdayPaymentDTO.setLastName(birthdayPayment.getUser().getLastName());
-            userBirthdayPaymentDTO.setFirstName(birthdayPayment.getUser().getFirstName());
-            userBirthdayPaymentDTO.setPatronymic(birthdayPayment.getUser().getPatronymic());
-            userBirthdayPaymentDTO.setPaymentAmount(birthdayPayment.getPaymentAmount());
-            userBirthdayPaymentDTO.setAmountPaid(birthdayPayment.getAmountPaid());
-            userBirthdayPaymentDTOList.add(userBirthdayPaymentDTO);
-        }
-
-        userBirthdayDTO.setUsersBirthdayPayment(userBirthdayPaymentDTOList);
-        return userBirthdayDTO;
-    }
-
-    public void mapping(UserBirthdayDTO userBirthdayDTO) {
-
-    }
 
     public boolean checkBirthday(User user) {
         return userBirthdayRepository.findByUserBirthdayId(user.getId()) == null;
+    }
+
+    public UserBirthday pay(PayToBirthdayDTO payToBirthdayDTO) {
+        UserBirthday userBirthday = findById(payToBirthdayDTO.getBirthdayId());
+
+        for (BirthdayPayment birthdayPayment : userBirthday.getUsersBirthdayPayment()) {
+            if (birthdayPayment.getUser().getId().equals(payToBirthdayDTO.getUserId())) {
+                birthdayPayment.setAmountPaid(payToBirthdayDTO.getPayMoney());
+            }
+        }
+
+
+        return userBirthdayRepository.save(userBirthday);
+    }
+
+    public Double getTotalAmountPaid(UserBirthday userBirthday) {
+        Double totalAmountPaid = 0.0;
+        for (BirthdayPayment birthdayPayment : userBirthday.getUsersBirthdayPayment()) {
+            totalAmountPaid += birthdayPayment.getAmountPaid();
+        }
+        return totalAmountPaid;
     }
 }

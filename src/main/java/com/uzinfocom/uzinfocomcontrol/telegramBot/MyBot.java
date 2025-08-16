@@ -90,12 +90,14 @@ public class MyBot extends TelegramLongPollingBot {
 
                         List<com.uzinfocom.uzinfocomcontrol.model.User> soonBirthday = userService.findSoonBirthday();
                         for (com.uzinfocom.uzinfocomcontrol.model.User soonBirthdayUser : soonBirthday) {
+                            System.out.println(user.getFirstName());
+                            System.out.println(user.getFirstName());
                             if (birthdayService.checkBirthday(soonBirthdayUser)){
                                 birthdayService.save(soonBirthdayUser, departmentService.getUsersByDepartmentId(soonBirthdayUser.getDepartment().getId()));
                             }
                         }
 
-                    }if(text.equals("bbb")){
+                    }else if(text.equals("bbb")){
                         List<UserBirthday> userBirthdayList = birthdayService.findAll();
                         for (UserBirthday userBirthday : userBirthdayList) {
                             for (BirthdayPayment birthdayPayment : userBirthday.getUsersBirthdayPayment()) {
@@ -104,11 +106,11 @@ public class MyBot extends TelegramLongPollingBot {
                                 }
                             }
                         }
-                    }if(text.equals("add")){
+                    }else if(text.equals("add")){
                         Department department = departmentService.getById(1L);
                         userService.saveMockDate(department);
                     }
-                    if (user.getTelegramPosition().name().equals(Position.REGISTER_FULL_NAME.name())) {
+                    else if (user.getTelegramPosition().name().equals(Position.REGISTER_FULL_NAME.name())) {
                         userService.setFullName(user, text);
                         userService.setPosition(user, Position.CHECK);
                         exec(botUserService.checkFullName(chatId, text));
