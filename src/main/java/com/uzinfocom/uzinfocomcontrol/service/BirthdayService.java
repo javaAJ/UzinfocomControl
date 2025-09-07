@@ -1,25 +1,23 @@
 package com.uzinfocom.uzinfocomcontrol.service;
 
-import com.uzinfocom.uzinfocomcontrol.model.BirthdayPayment;
-import com.uzinfocom.uzinfocomcontrol.model.DTO.PayToBirthdayDTO;
 import com.uzinfocom.uzinfocomcontrol.model.Department;
 import com.uzinfocom.uzinfocomcontrol.model.User;
 import com.uzinfocom.uzinfocomcontrol.model.UserBirthday;
-import com.uzinfocom.uzinfocomcontrol.model.repository.BirthdayPaymentRepository;
 import com.uzinfocom.uzinfocomcontrol.model.repository.UserBirthdayRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
 @Slf4j
 @Service
 public class BirthdayService {
-    @Autowired
-    private BirthdayPaymentRepository birthdayPaymentRepository;
     @Autowired
     private UserBirthdayRepository userBirthdayRepository;
 
@@ -36,51 +34,54 @@ public class BirthdayService {
         return userBirthdayRepository.findByUserBirthdayId(id);
     }
 
-    public UserBirthday save(User user, Department department) {
-        UserBirthday userBirthday = new UserBirthday();
-        userBirthday.setUserBirthday(user);
-
-        List<BirthdayPayment> usersBirthdayPayment = new ArrayList<>();
-        for (User departmentUser : department.getUsers()) {
-            if (!departmentUser.getId().equals(user.getId())) {
-                BirthdayPayment birthdayPayment = new BirthdayPayment();
-                birthdayPayment.setUser(departmentUser);
-                birthdayPayment.setPaymentAmount(100_000D);
-                birthdayPayment.setAmountPaid(0D);
-                birthdayPaymentRepository.save(birthdayPayment);
-                usersBirthdayPayment.add(birthdayPayment);
-            }
-        }
-
-        userBirthday.setUsersBirthdayPayment(usersBirthdayPayment);
-        UserBirthday save = userBirthdayRepository.save(userBirthday);
-        System.out.println(save.getUserBirthday().getFirstName());
-        return save;
-    }
+//    public UserBirthday save(User user, Department department, List<User> soonBirthday) {
+//        UserBirthday userBirthday = new UserBirthday();
+//        userBirthday.setUserBirthday(user);
+//
+//        UserBirthday save = userBirthdayRepository.save(userBirthday);
+//        return save;
+//    }
 
 
     public boolean checkBirthday(User user) {
         return userBirthdayRepository.findByUserBirthdayId(user.getId()) == null;
     }
 
-    public UserBirthday pay(PayToBirthdayDTO payToBirthdayDTO) {
-        UserBirthday userBirthday = findById(payToBirthdayDTO.getBirthdayId());
+    public boolean pay(Long birthdayId,User userBirthday, User userPayment, Boolean isPaid, Department department) {
+        UserBirthday userBirthdayToSave;
+        if(birthdayId == null){
+           userBirthdayToSave = new UserBirthday();
+           userBirthdayToSave.setUserBirthday(userBirthday);
+           userBirthdayToSave.setUserPayment(userPayment);
+           userBirthdayToSave.setIsPaid(isPaid);
+           userBirthdayToSave.setPaidDate(LocalDate.now());
+           userBirthdayToSave.setDepartment(department);
+           userBirthdayRepository.save(userBirthdayToSave);
+           return true;
+        }
+        userBirthdayRepository.deleteById(birthdayId);
+        return true;
+    }
 
-        for (BirthdayPayment birthdayPayment : userBirthday.getUsersBirthdayPayment()) {
-            if (birthdayPayment.getUser().getId().equals(payToBirthdayDTO.getUserId())) {
-                birthdayPayment.setAmountPaid(payToBirthdayDTO.getPayMoney());
+    public List<UserBirthday> getAllByDepartment(Long departmentId) {
+        List<UserBirthday> all = userBirthdayRepository.findAllByDepartment_Id(departmentId);
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Tashkent")).minusMonths(1);
+        LocalDate afterMonth = LocalDate.now(ZoneId.of("Asia/Tashkent")).plusMonths(1);
+
+        List<UserBirthday> userBirthdayList = new ArrayList<>();
+        for (UserBirthday userBirthday : all) {
+            if (userBirthday.getPaidDate().getDayOfYear() >= today.getDayOfYear() &&
+                    userBirthday.getPaidDate().getDayOfYear() <= afterMonth.getDayOfYear()) {
+                userBirthdayList.add(userBirthday);
             }
         }
-
-
-        return userBirthdayRepository.save(userBirthday);
+        return userBirthdayList;
     }
 
-    public Double getTotalAmountPaid(UserBirthday userBirthday) {
-        Double totalAmountPaid = 0.0;
-        for (BirthdayPayment birthdayPayment : userBirthday.getUsersBirthdayPayment()) {
-            totalAmountPaid += birthdayPayment.getAmountPaid();
-        }
-        return totalAmountPaid;
-    }
+//    public List<User> getAllByNotBirthday() {
+//        List<UserBirthday> userBirthdayList = userBirthdayRepository.findAll();
+//
+//
+//
+//    }
 }

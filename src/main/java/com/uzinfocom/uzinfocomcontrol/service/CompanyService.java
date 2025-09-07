@@ -27,9 +27,9 @@ public class CompanyService {
         return companyRepository.findById(id).get();
     }
 
-    public boolean addCompany(CompanyDTO companyDTO) {
+    public Company addCompany(CompanyDTO companyDTO) {
         if (companyDTO.getName() == null){
-            return false;
+            return null;
         }
         Company company = new Company();
         company.setName(companyDTO.getName());
@@ -43,8 +43,8 @@ public class CompanyService {
             company.setDepartmentList(departmentList);
         }
 
-        companyRepository.save(company);
-        return true;
+
+        return companyRepository.save(company);
     }
 
     private List<Department> addDepartmentsToCompany(List<Long> departmentsId) {

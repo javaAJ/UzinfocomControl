@@ -6,8 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
+import java.time.LocalDate;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,8 +17,13 @@ public class UserBirthday {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     private User userBirthday;
-    @OneToMany
-    private List<BirthdayPayment> usersBirthdayPayment;
+    private Boolean isPaid;
+    @ManyToOne
+    private User userPayment;
+    private LocalDate paidDate;
+    @ManyToOne
+    private Department department;
+
 }

@@ -1,6 +1,5 @@
 package com.uzinfocom.uzinfocomcontrol.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.uzinfocom.uzinfocomcontrol.model.enums.Position;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity(name = "users")
 @NoArgsConstructor
@@ -22,7 +20,9 @@ public class User {
     private String lastName;
     private String firstName;
     private String patronymic;
+    private String telegramUserName;
     private String userName;
+    private String password;
     private String phoneNumber;
     private LocalDate dateOfBirthday;
     @Enumerated(EnumType.STRING)

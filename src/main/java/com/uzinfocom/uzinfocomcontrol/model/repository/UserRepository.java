@@ -7,9 +7,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User,Long> {
     @Query("SELECT u FROM users u WHERE FUNCTION('DAY', u.dateOfBirthday) = :day AND FUNCTION('MONTH', u.dateOfBirthday) = :month")
     List<User> findUsersWithBirthday(@Param("day") int day, @Param("month") int month);
+
+    Optional<User> findByUserName(String userName);
+
+    List<User> findAllByDepartment_Id(Long departmentId);
 }

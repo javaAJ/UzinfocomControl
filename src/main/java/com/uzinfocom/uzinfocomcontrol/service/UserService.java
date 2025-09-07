@@ -117,8 +117,6 @@ public class UserService {
         List<User> allUsers = userRepository.findAll();
         LocalDate today = LocalDate.now(ZoneId.of("Asia/Tashkent"));
 
-        System.out.println(today.getDayOfMonth() + "   " + today.getMonthValue());
-        System.out.println("dadsadadsadsada");
         return allUsers.stream()
                 .filter(u -> {
                     LocalDate dob = u.getDateOfBirthday(); // тип должен быть LocalDate
@@ -131,7 +129,7 @@ public class UserService {
 
     public List<User> findSoonBirthday() {
         List<User> users = userRepository.findAll();
-        LocalDate today = LocalDate.now(ZoneId.of("Asia/Tashkent"));
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Tashkent")).minusMonths(1);
         LocalDate afterMonth = LocalDate.now(ZoneId.of("Asia/Tashkent")).plusMonths(1);
 
         List<User> usersWithBirthday = new ArrayList<>();
@@ -140,10 +138,25 @@ public class UserService {
         System.out.println("After month");
         System.out.println(afterMonth.getDayOfYear());
         for (User user : users) {
-            System.out.println("=======================");
-            System.out.println(user.getDateOfBirthday().getDayOfYear());
             if (user.getDateOfBirthday().getDayOfYear() >= today.getDayOfYear() &&
                     user.getDateOfBirthday().getDayOfYear() <= afterMonth.getDayOfYear()) {
+                usersWithBirthday.add(user);
+            }
+        }
+        return usersWithBirthday;
+    }
+
+    public List<User> getAllByNotBirthday() {
+        List<User> users = userRepository.findAll();
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Tashkent")).minusMonths(1);
+        LocalDate afterMonth = LocalDate.now(ZoneId.of("Asia/Tashkent")).plusMonths(1);
+
+        List<User> usersWithBirthday = new ArrayList<>();
+        for (User user : users) {
+            System.out.println("=======================");
+            System.out.println(user.getDateOfBirthday().getDayOfYear());
+            if (user.getDateOfBirthday().getDayOfYear() < today.getDayOfYear() ||
+                    user.getDateOfBirthday().getDayOfYear() > afterMonth.getDayOfYear()) {
                 usersWithBirthday.add(user);
             }
         }
@@ -153,15 +166,17 @@ public class UserService {
 
 
 
-    public void saveMockDate(Department department){
+    public void saveMockDate(Department department, Department department2){
         User user = new User();
         user.setFirstName("Jahongir");
         user.setLastName("Akbarov");
         user.setPatronymic("Abror O`g`li");
-        user.setDateOfBirthday(LocalDate.of(2000,8,14));
+        user.setDateOfBirthday(LocalDate.of(2000,9,4));
         user.setTelegramPosition(Position.WAIT);
         user.setDepartment(department);
-        user.setUserName("a_n_g_u_l_a_r");
+        user.setTelegramUserName("a_n_g_u_l_a_r");
+        user.setUserName("admin");
+        user.setPassword("123");
         user.setPhoneNumber("+9989101098");
         user.setId(6409116156L);
 
@@ -171,7 +186,7 @@ public class UserService {
         user2.setFirstName("Ali");
         user2.setLastName("Vali");
         user2.setPatronymic("Ali");
-        user2.setDateOfBirthday(LocalDate.of(2000,8,14));
+        user2.setDateOfBirthday(LocalDate.of(2000,9,4));
         user2.setTelegramPosition(Position.WAIT);
         user2.setDepartment(department);
         user2.setUserName("mmbbzzp");
@@ -184,7 +199,7 @@ public class UserService {
         user3.setFirstName("Ali");
         user3.setLastName("Vali");
         user3.setPatronymic("Ali");
-        user3.setDateOfBirthday(LocalDate.of(2000,8,20));
+        user3.setDateOfBirthday(LocalDate.of(2000,9,7));
         user3.setTelegramPosition(Position.WAIT);
         user3.setDepartment(department);
         user3.setUserName("mmbbzzp");
@@ -199,7 +214,7 @@ public class UserService {
         user4.setPatronymic("Ali");
         user4.setDateOfBirthday(LocalDate.of(2000,7,20));
         user4.setTelegramPosition(Position.WAIT);
-        user4.setDepartment(department);
+        user4.setDepartment(department2);
         user4.setUserName("mmbbzzp");
         user4.setPhoneNumber("+9272626");
         user4.setId(-2L);
@@ -213,12 +228,77 @@ public class UserService {
         user5.setPatronymic("Ali");
         user5.setDateOfBirthday(LocalDate.of(2000,9,20));
         user5.setTelegramPosition(Position.WAIT);
-        user5.setDepartment(department);
-        user5.setUserName("mmbbzzp");
+        user5.setDepartment(department2);
+        user5.setUserName("user");
+        user5.setPassword("111");
         user5.setPhoneNumber("+9272626");
         user5.setId(-3L);
 
 
         userRepository.save(user5);
+
+
+        User user6 = new User();
+        user6.setFirstName("Ahad");
+        user6.setLastName("Qayum");
+        user6.setPatronymic("valiyev");
+        user6.setDateOfBirthday(LocalDate.of(1990,3,15));
+        user6.setTelegramPosition(Position.WAIT);
+        user6.setDepartment(department);
+        user6.setUserName("mmbbzzp");
+        user6.setPhoneNumber("+9989398484");
+        user6.setId(-4L);
+
+
+        userRepository.save(user6);
+
+
+        User user7 = new User();
+        user7.setFirstName("Zokir");
+        user7.setLastName("Rahimov");
+        user7.setPatronymic("BirNarsayev");
+        user7.setDateOfBirthday(LocalDate.of(2006,1,5));
+        user7.setTelegramPosition(Position.WAIT);
+        user7.setDepartment(department2);
+        user7.setUserName("zokirjon");
+        user7.setPhoneNumber("+998997777777");
+        user7.setId(-5L);
+
+
+        userRepository.save(user7);
+    }
+
+    public List<User> getByDepartment(Long departmentId) {
+        return userRepository.findAllByDepartment_Id(departmentId);
+    }
+
+    public List<User> getAllByNotBirthdayByDepartment(Long id) {
+        List<User> users = userRepository.findAllByDepartment_Id(id);
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Tashkent")).minusMonths(1);
+        LocalDate afterMonth = LocalDate.now(ZoneId.of("Asia/Tashkent")).plusMonths(1);
+
+        List<User> usersWithBirthday = new ArrayList<>();
+        for (User user : users) {
+            if (user.getDateOfBirthday().getDayOfYear() < today.getDayOfYear() ||
+                    user.getDateOfBirthday().getDayOfYear() > afterMonth.getDayOfYear()) {
+                usersWithBirthday.add(user);
+            }
+        }
+        return usersWithBirthday;
+    }
+
+    public List<User> findSoonBirthdayByDepartment(Long id) {
+        List<User> users = userRepository.findAllByDepartment_Id(id);
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Tashkent")).minusMonths(1);
+        LocalDate afterMonth = LocalDate.now(ZoneId.of("Asia/Tashkent")).plusMonths(1);
+
+        List<User> usersWithBirthday = new ArrayList<>();
+        for (User user : users) {
+            if (user.getDateOfBirthday().getDayOfYear() >= today.getDayOfYear() &&
+                    user.getDateOfBirthday().getDayOfYear() <= afterMonth.getDayOfYear()) {
+                usersWithBirthday.add(user);
+            }
+        }
+        return usersWithBirthday;
     }
 }

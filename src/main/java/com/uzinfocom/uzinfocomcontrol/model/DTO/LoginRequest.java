@@ -5,15 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 @Setter
-public class PayToBirthdayDTO {
-    private Long id;
-    private Long birthdayUserId;
-    private Boolean isPaid;
-    private Long userPaymentId;
+@Getter
+public class LoginRequest {
+    private String username;
+    private String password;
 }

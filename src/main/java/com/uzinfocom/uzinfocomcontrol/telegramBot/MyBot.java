@@ -1,6 +1,5 @@
 package com.uzinfocom.uzinfocomcontrol.telegramBot;
 
-import com.uzinfocom.uzinfocomcontrol.model.BirthdayPayment;
 import com.uzinfocom.uzinfocomcontrol.model.Department;
 import com.uzinfocom.uzinfocomcontrol.model.RegisterLink;
 import com.uzinfocom.uzinfocomcontrol.model.UserBirthday;
@@ -89,26 +88,19 @@ public class MyBot extends TelegramLongPollingBot {
                     if(text.equals("aaa")){
 
                         List<com.uzinfocom.uzinfocomcontrol.model.User> soonBirthday = userService.findSoonBirthday();
-                        for (com.uzinfocom.uzinfocomcontrol.model.User soonBirthdayUser : soonBirthday) {
-                            System.out.println(user.getFirstName());
-                            System.out.println(user.getFirstName());
-                            if (birthdayService.checkBirthday(soonBirthdayUser)){
-                                birthdayService.save(soonBirthdayUser, departmentService.getUsersByDepartmentId(soonBirthdayUser.getDepartment().getId()));
-                            }
-                        }
 
                     }else if(text.equals("bbb")){
-                        List<UserBirthday> userBirthdayList = birthdayService.findAll();
-                        for (UserBirthday userBirthday : userBirthdayList) {
-                            for (BirthdayPayment birthdayPayment : userBirthday.getUsersBirthdayPayment()) {
-                                if (birthdayPayment.getPaymentAmount()>birthdayPayment.getAmountPaid()) {
-                                    sendUserPayment(userBirthday.getUserBirthday().getId(),birthdayPayment);
-                                }
-                            }
-                        }
+//                        List<UserBirthday> userBirthdayList = birthdayService.findAll();
+//                        for (UserBirthday userBirthday : userBirthdayList) {
+//                            for (BirthdayPayment birthdayPayment : userBirthday.getUsersBirthdayPayment()) {
+//                                if (!birthdayPayment.getIsPaid()) {
+//                                    sendUserPayment(userBirthday.getUserBirthday().getId(),birthdayPayment);
+//                                }
+//                            }
+//                        }
                     }else if(text.equals("add")){
                         Department department = departmentService.getById(1L);
-                        userService.saveMockDate(department);
+                        userService.saveMockDate(department,department);
                     }
                     else if (user.getTelegramPosition().name().equals(Position.REGISTER_FULL_NAME.name())) {
                         userService.setFullName(user, text);
@@ -239,8 +231,8 @@ public class MyBot extends TelegramLongPollingBot {
         exec(new SendMessage(user.getId()+"", text));
     }
 
-    public void sendUserPayment(Long userBirthdayId, BirthdayPayment birthdayPayment) {
-        com.uzinfocom.uzinfocomcontrol.model.User user = userService.getById(birthdayPayment.getUser().getId());
+    public void sendUserPayment(Long userBirthdayId, UserBirthday birthdayPayment) {
+        com.uzinfocom.uzinfocomcontrol.model.User user = userService.getById(birthdayPayment.getUserPayment().getId());
         com.uzinfocom.uzinfocomcontrol.model.User userBirthday = userService.getById(userBirthdayId);
         String userBirthdayFullName = userBirthday.getLastName() + " " + userBirthday.getFirstName() + " " + userBirthday.getPatronymic();
         String fullName = user.getLastName() + " " + user.getFirstName() + " " + user.getPatronymic();
@@ -248,10 +240,7 @@ public class MyBot extends TelegramLongPollingBot {
                 "Hurmatli " + fullName + "!\n\n" +
                 "Tug`ulgan kun egas: "  + userBirthdayFullName + "\n" +
                 "Tug`ulgan kun sanasi: " + userBirthday.getDateOfBirthday().toString() + "\n" +
-                "To`lanishi kerak bo`lgan summan: " + birthdayPayment.getPaymentAmount() + "\n" +
-                "To`langan summa: " +  birthdayPayment.getAmountPaid() + "\n\n" +
-                "To`lash kerak bo`lgan summan: " + (birthdayPayment.getPaymentAmount() - birthdayPayment.getAmountPaid());
-
+                "To`lanishi kerak bo`lgan summan: 30 000 so`m\n";
         exec(new SendMessage(user.getId()+"", text));
     }
 }

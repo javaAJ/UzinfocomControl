@@ -42,17 +42,17 @@ public class DepartmentService {
         departmentRepository.save(department);
         return true;
     }
-    public boolean addDepartment(String name, Company company) {
+    public Department addDepartment(String name, Company company) {
         if (name == null || company == null){
-            return false;
+            return null;
         }
 
         Department department = new Department();
         department.setName(name);
         department.setCompany(company);
 
-        departmentRepository.save(department);
-        return true;
+
+        return departmentRepository.save(department);
     }
     @Transactional
     public void addUser(Long id, User user) {

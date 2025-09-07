@@ -35,9 +35,9 @@ public class CompanyController {
     public Boolean addCompany(
             @RequestBody CompanyDTO companyDTO
     ) throws ServiceException {
-        boolean isAdded = companyService.addCompany(companyDTO);
+        Company isAdded = companyService.addCompany(companyDTO);
         System.out.println(companyDTO.getName());
-        if (!isAdded){
+        if (isAdded == null){
             throw new ServiceException("Company wasn't added");
         }
         return true;

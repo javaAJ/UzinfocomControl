@@ -5,16 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserBirthdayDTO {
-    private Long id;
-    private UserDTO birthdayUser;
-    private Boolean isPaid;
-    private LocalDate paidDate;
-    private UserDTO userPayment;
+public class AuthResponse {
+    private String token;
 }

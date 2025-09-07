@@ -47,9 +47,9 @@ public class DepartmentController {
             @RequestBody DepartmentDTO departmentDTO
     ) throws ServiceException {
         Company company = companyService.getById(departmentDTO.getCompanyId());
-        boolean isAdded = departmentService.addDepartment(departmentDTO.getName(), company);
+        Department isAdded = departmentService.addDepartment(departmentDTO.getName(), company);
 
-        if (!isAdded){
+        if (isAdded == null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Department wasn't added");
         }
         return true;

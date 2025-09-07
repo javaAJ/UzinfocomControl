@@ -1,13 +1,14 @@
 package com.uzinfocom.uzinfocomcontrol.controller;
 
-import com.uzinfocom.uzinfocomcontrol.model.BirthdayPayment;
-import com.uzinfocom.uzinfocomcontrol.model.DTO.PayToBirthdayDTO;
-import com.uzinfocom.uzinfocomcontrol.model.DTO.UserBirthdayDTO;
-import com.uzinfocom.uzinfocomcontrol.model.DTO.UserBirthdayPaymentDTO;
+import com.uzinfocom.uzinfocomcontrol.model.DTO.*;
+import com.uzinfocom.uzinfocomcontrol.model.Department;
+import com.uzinfocom.uzinfocomcontrol.model.User;
 import com.uzinfocom.uzinfocomcontrol.model.UserBirthday;
 import com.uzinfocom.uzinfocomcontrol.service.BirthdayService;
+import com.uzinfocom.uzinfocomcontrol.service.DepartmentService;
 import com.uzinfocom.uzinfocomcontrol.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -20,7 +21,38 @@ public class BirthdayController {
     private BirthdayService birthdayService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private DepartmentService departmentService;
 
+//    @GetMapping("/matrix")
+//    public List<MatrixDTO> getMatrix() {
+//        birthdayService.getMatrix()
+//        return ;
+//    }
+
+    @GetMapping("/getAllByDepartment")
+    public List<UserBirthdayDTO> getAllBYDepartment(@AuthenticationPrincipal User user) {
+
+        List<UserBirthday> birthdayList = birthdayService.getAllByDepartment(user.getDepartment().getId());
+
+        List<UserBirthdayDTO> userBirthdayDTOList = new ArrayList<>();
+        for (UserBirthday userBirthday : birthdayList) {
+            userBirthdayDTOList.add(mapping(userBirthday));
+        }
+
+        return userBirthdayDTOList;
+    }
+    @GetMapping("/getSoonBirthdayUsersByDepartment")
+    public List<UserDTO> getSoonBirthdayUsers(@AuthenticationPrincipal User user) {
+        List<User> soonBirthday = userService.findSoonBirthdayByDepartment(user.getDepartment().getId());
+
+        List<UserDTO> userDTOList = new ArrayList<>();
+        for (User userBirthday : soonBirthday) {
+            userDTOList.add(userService.toUserDto(userBirthday));
+        }
+
+        return userDTOList;
+    }
     @GetMapping("/info/{userId}")
     public UserBirthdayDTO getInfo(@PathVariable("userId") Long id) {
         System.out.println(id);
@@ -29,38 +61,38 @@ public class BirthdayController {
         UserBirthday byUserId = birthdayService.findByUserId(id);
         return mapping(byUserId);
     }
+
+    @GetMapping("/matrix")
+    public List<UserBirthdayDTO> getInfo() {
+        List<UserBirthday> userBirthdayList = birthdayService.findAll();
+        List<UserBirthdayDTO> userBirthdayDTOList = new ArrayList<>();
+        for (UserBirthday userBirthday : userBirthdayList) {
+            userBirthdayDTOList.add(mapping(userBirthday));
+        }
+        return userBirthdayDTOList;
+    }
+
     @PostMapping("/pay")
-    public UserBirthdayDTO payToBirthday(
-            @RequestBody() PayToBirthdayDTO payToBirthdayDTO
+    public boolean payToBirthday(
+            @RequestBody() PayToBirthdayDTO payToBirthdayDTO,
+            @AuthenticationPrincipal User user
     ) {
-        System.out.println(payToBirthdayDTO.getBirthdayId());
-        System.out.println(payToBirthdayDTO.getPayMoney());
-        System.out.println(payToBirthdayDTO.getUserId());
-        UserBirthday byUserId = birthdayService.pay(payToBirthdayDTO);
-        return mapping(byUserId);
+        User userBirthday = userService.getById(payToBirthdayDTO.getBirthdayUserId());
+        User userPayment = userService.getById(payToBirthdayDTO.getUserPaymentId());
+        Department department = departmentService.getById(user.getDepartment().getId());
+
+        boolean isAdd = birthdayService.pay(payToBirthdayDTO.getId(),userBirthday, userPayment, payToBirthdayDTO.getIsPaid(),department);
+        return isAdd;
     }
 
     public UserBirthdayDTO mapping(UserBirthday userBirthday) {
         UserBirthdayDTO userBirthdayDTO = new UserBirthdayDTO();
         userBirthdayDTO.setId(userBirthday.getId());
         userBirthdayDTO.setBirthdayUser(userService.toUserDto(userBirthday.getUserBirthday()));
-        userBirthdayDTO.setTotalAmountPaid(birthdayService.getTotalAmountPaid(userBirthday));
-        List<UserBirthdayPaymentDTO> userBirthdayPaymentDTOList = new ArrayList<>();
-
-        for (BirthdayPayment birthdayPayment : userBirthday.getUsersBirthdayPayment()) {
-            UserBirthdayPaymentDTO userBirthdayPaymentDTO = new UserBirthdayPaymentDTO();
-            userBirthdayPaymentDTO.setUser(userService.toUserDto(birthdayPayment.getUser()));
-            userBirthdayPaymentDTO.setPaymentAmount(birthdayPayment.getPaymentAmount());
-            userBirthdayPaymentDTO.setAmountPaid(birthdayPayment.getAmountPaid());
-            userBirthdayPaymentDTO.setIsPaid(isPaid(birthdayPayment));
-            userBirthdayPaymentDTOList.add(userBirthdayPaymentDTO);
-        }
-
-        userBirthdayDTO.setUsersBirthdayPayment(userBirthdayPaymentDTOList);
+        userBirthdayDTO.setIsPaid(userBirthday.getIsPaid());
+        userBirthdayDTO.setPaidDate(userBirthday.getPaidDate());
+        userBirthdayDTO.setUserPayment(userService.toUserDto(userBirthday.getUserPayment()));
         return userBirthdayDTO;
     }
 
-    private boolean isPaid(BirthdayPayment birthdayPayment){
-        return birthdayPayment.getPaymentAmount()-birthdayPayment.getAmountPaid() <= 0;
-    }
 }
